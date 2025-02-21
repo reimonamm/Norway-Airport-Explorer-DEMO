@@ -1,0 +1,44 @@
+{
+    "NAV": {
+      "TITLE": "Norra Lennujaamad",
+      "AIRPORTS": "Lennujaamad",
+      "ABOUT": "Meist",
+      "CONTACT": "Kontakt"
+    },
+    "AIRPORTS": {
+      "TITLE": "Norra Lennujaamad",
+      "SEARCH": "Otsi lennujaamu...",
+      "NO_RESULTS": "Lennujaamu ei leitud",
+      "LOADING": "Laen lennujaamu..."
+    },
+    "AIRPORT_DETAILS": {
+      "DEPARTURES": "Järgmised väljumised",
+      "BACK": "Tagasi nimekirja",
+      "LOADING": "Laen lennujaama andmeid...",
+      "NO_DEPARTURES": "Väljumisi pole saadaval"
+    },
+    "ABOUT": {
+      "TITLE": "Teave Norra Lennujaamade Rakenduse Kohta",
+      "PROJECT_OVERVIEW": "Projekti ülevaade",
+      "PROJECT_DESCRIPTION": "Tere tulemast Norra Lennujaamade rakendusse, mis on loodud pakkumaks reaalajas teavet Norra lennujaamade kohta.",
+      "FEATURES": "Võimalused",
+      "FEATURE_LIST": {
+        "AIRPORTS": "Täielik nimekiri Norra lennujaamadest",
+        "DEPARTURES": "Reaalajas jälgimine järgmise 5 väljumise kohta igas lennujaamas",
+        "MAP": "Interaktiivne kaart lennujaamade asukohtadega",
+        "DETAILS": "Detailne lennujaamade info ja statistika"
+      },
+      "TECHNICAL": "Tehnilised üksikasjad",
+      "TECHNICAL_DESCRIPTION": "Rakendus on ehitatud Angulari platvormil ja kasutab Airlabs API-t, demonstreerides kaasaegseid veebiarenduse praktikaid ja reaalajas andmete integreerimist."
+    },
+    "CONTACT": {
+      "TITLE": "Võta ühendust",
+      "DEMO_NOTICE": "Demo teade",
+      "DEMO_TEXT": "See kontaktivorm on ainult frontend demo ja ei ole ühendatud ühegi taustateenusega.",
+      "NAME": "Nimi",
+      "EMAIL": "E-post",
+      "MESSAGE": "Sõnum",
+      "SEND": "Saada sõnum",
+      "SUCCESS": "Demo: Sõnum edukalt saadetud!"
+    }
+  }

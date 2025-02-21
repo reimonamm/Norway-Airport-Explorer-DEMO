@@ -1,0 +1,44 @@
+{
+    "NAV": {
+      "TITLE": "Norway Airports",
+      "AIRPORTS": "Airports",
+      "ABOUT": "About",
+      "CONTACT": "Contact"
+    },
+    "AIRPORTS": {
+      "TITLE": "Norwegian Airports",
+      "SEARCH": "Search airports...",
+      "NO_RESULTS": "No airports found",
+      "LOADING": "Loading airports..."
+    },
+    "AIRPORT_DETAILS": {
+      "DEPARTURES": "Next Departures",
+      "BACK": "Back to list",
+      "LOADING": "Loading airport details...",
+      "NO_DEPARTURES": "No departures available"
+    },
+    "ABOUT": {
+      "TITLE": "About Norwegian Airports Explorer",
+      "PROJECT_OVERVIEW": "Project Overview",
+      "PROJECT_DESCRIPTION": "Welcome to the Norwegian Airports Explorer, a comprehensive platform designed to provide real-time information about airports across Norway.",
+      "FEATURES": "Features",
+      "FEATURE_LIST": {
+        "AIRPORTS": "Complete listing of all airports in Norway",
+        "DEPARTURES": "Real-time tracking of the next 5 departures for each airport",
+        "MAP": "Interactive map integration showing airport locations",
+        "DETAILS": "Detailed airport information and statistics"
+      },
+      "TECHNICAL": "Technical Details",
+      "TECHNICAL_DESCRIPTION": "Built with Angular and powered by the Airlabs API, this application demonstrates modern web development practices and real-time data integration."
+    },
+    "CONTACT": {
+      "TITLE": "Contact Us",
+      "DEMO_NOTICE": "Demo Notice",
+      "DEMO_TEXT": "This contact form is a frontend demonstration only and is not connected to any backend service.",
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "MESSAGE": "Message",
+      "SEND": "Send Message",
+      "SUCCESS": "Demo: Message submitted successfully!"
+    }
+  }
