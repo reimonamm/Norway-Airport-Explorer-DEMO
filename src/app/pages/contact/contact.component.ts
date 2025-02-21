@@ -181,7 +181,6 @@ export class ContactComponent implements AfterViewInit {
   }
 
   validateField(input: any) {
-    // Additional validation logic if needed
     input.control.markAsTouched();
   }
 

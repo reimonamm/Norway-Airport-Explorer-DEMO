@@ -52,7 +52,7 @@ export class AirportsService {
 
     return this.http.get<ApiResponse<AirportApiResponse>>(`${this.apiBaseUrl}/airports`, { params }).pipe(
       map(response => {
-        // Filter for Norwegian airports and transform to our interface
+        // Filter for Norwegian airports
         const airports = (response.response || [])
           .filter((airport: AirportApiResponse) => 
             airport.country === 'Norway' || 
@@ -60,9 +60,8 @@ export class AirportsService {
             airport.country_code === 'NO'
           )
           .map((airport: AirportApiResponse): Airport => ({
-            // Use either iata or iata_code, preferring iata_code if available
+        
             iata: airport.iata_code || airport.iata || '',
-            // Use either icao or icao_code, preferring icao_code if available
             icao: airport.icao_code || airport.icao || '',
             name: airport.name || '',
             city: airport.city || '',
