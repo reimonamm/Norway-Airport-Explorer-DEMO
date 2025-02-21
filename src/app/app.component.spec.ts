@@ -29,19 +29,12 @@ describe('AppComponent', () => {
  });
 
  // Test 1: Default language check
- // To verify this test works:
- // - Change 'en' to any other language code (e.g., 'fr' or 'de') 
- // - Run 'ng test' - it should fail because default language is 'en'
  it('should initialize with English as default language', () => {
    expect(translateService.getDefaultLang()).toBe('en');
    expect(translateService.currentLang).toBe('en');
  });
 
  // Test 2: Supported languages check
- // To verify this test works:
- // - Change array length expectation from 2 to 3
- // - Or change 'en' to 'fr' in toContain()
- // - Run 'ng test' - it should fail because only 'en' and 'et' are supported
  it('should have correct supported languages', () => {
    const supportedLangs = translateService.getLangs();
    expect(supportedLangs).toContain('en');
@@ -50,10 +43,6 @@ describe('AppComponent', () => {
  });
 
  // Test 3: Component structure check
- // To verify this test works:
- // - Change any of the selectors to a non-existent one (e.g., 'wrong-selector')
- // - Or add .querySelector('.non-existent-class')
- // - Run 'ng test' - it should fail because these elements don't exist
  it('should render app structure with navbar, main content, and footer', () => {
    const compiled = fixture.nativeElement as HTMLElement;
    expect(compiled.querySelector('app-navbar')).toBeTruthy();
