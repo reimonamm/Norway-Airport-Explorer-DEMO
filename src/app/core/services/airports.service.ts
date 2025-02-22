@@ -62,8 +62,6 @@ export class AirportsService {
         
         // Filter out airports without IATA codes
         const validAirports = airports.filter((airport: Airport) => airport.iata);
-        console.log(`Found ${validAirports.length} valid Norwegian airports`);
-        
         return validAirports;
       }),
       tap(airports => {
@@ -71,7 +69,6 @@ export class AirportsService {
         this.storeAirports(airports);
       }),
       catchError(error => {
-        console.error('Error fetching airports:', error);
         return([]);
       })
     );
@@ -87,7 +84,6 @@ export class AirportsService {
         })
       );
     } catch (error) {
-      console.error('Error storing airports in localStorage:', error);
     }
   }
 
@@ -95,60 +91,40 @@ export class AirportsService {
     try {
       const storedData = localStorage.getItem(this.AIRPORTS_STORAGE_KEY);
       if (!storedData) return null;
-
+      
       const parsedData = JSON.parse(storedData);
-
-      const SIX_MONTHS = 6 * 30 * 24 * 60 * 60 * 1000;
-      if (Date.now() - parsedData.timestamp > SIX_MONTHS) {
+      const ONE_HOUR = 60 * 60 * 1000;
+      
+      if (Date.now() - parsedData.timestamp > ONE_HOUR) {
         localStorage.removeItem(this.AIRPORTS_STORAGE_KEY);
         return null;
       }
-
+      
       return parsedData.airports;
     } catch (error) {
-      console.error('Error retrieving airports from localStorage:', error);
       return null;
     }
   }
 
   getAirportByCode(iataCode: string): Observable<Airport | undefined> {
     if (!iataCode) {
-      console.error('Empty IATA code provided');
       return of(undefined);
     }
-
     const normalizedCode = iataCode.trim().toUpperCase();
-    console.log(`Looking up airport with normalized code: ${normalizedCode}`);
     
     return this.getNorwayAirports().pipe(
-      tap(airports => {
-        console.log(`Checking among ${airports.length} airports`);
-        console.log('Available airport codes:', airports.map(a => a.iata));
-      }),
-      map(airports => {
-        const airport = airports.find((airport: Airport) => 
-          airport.iata && airport.iata.toUpperCase() === normalizedCode
-        );
-        
-        if (!airport) {
-          console.warn(`No airport found with code ${normalizedCode}`);
-        } else {
-          console.log(`Found airport: ${airport.name}`);
-        }
-        
-        return airport;
-      })
+      map(airports => airports.find((airport: Airport) => 
+        airport.iata && airport.iata.toUpperCase() === normalizedCode
+      ))
     );
-  }
+}
 
   getAirportDepartures(airportCode: string): Observable<Departure[]> {
     if (!airportCode) {
       return of([]);
     }
 
-    const normalizedCode = airportCode.trim().toUpperCase();
-    console.log(`Fetching departures for airport: ${normalizedCode}`);
-    
+    const normalizedCode = airportCode.trim().toUpperCase(); 
     const params = new HttpParams()
       .set('api_key', this.airlabsApiKey)
       .set('dep_iata', normalizedCode)
@@ -166,11 +142,9 @@ export class AirportsService {
     return this.http.get<ApiResponse<DepartureApiResponse>>(`${this.apiBaseUrl}/schedules`, { params }).pipe(
       map(response => {
         const departures = response.response || [];
-        console.log(`Received ${departures.length} departures`);
         return departures as Departure[];
       }),
       catchError(error => {
-        console.error('Error fetching departures:', error);
         return of([]);
       })
     );

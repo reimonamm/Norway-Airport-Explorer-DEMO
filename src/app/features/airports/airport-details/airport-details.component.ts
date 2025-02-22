@@ -132,11 +132,6 @@ export class AirportDetailsComponent implements OnInit {
   isLoading = true;
   isLoadingDepartures = true;
   
-  // Debugging properties
-  currentUrl = '';
-  routeCode: string | null = null;
-  paramMapKeys = '';
-  routeSegments = '';
   
   constructor(
     public route: ActivatedRoute,
@@ -146,18 +141,12 @@ export class AirportDetailsComponent implements OnInit {
   
   ngOnInit() {
     // Get the route parameter once on init
-    const code = this.route.snapshot.paramMap.get('code');
-    this.routeCode = code;
-    
-    // Debug information
-    this.currentUrl = this.router.url;
-    this.paramMapKeys = this.route.snapshot.paramMap.keys.join(', ') || 'none';
-    
+    const code = this.route.snapshot.paramMap.get('code');;
+       
     // If we have a code, load the airport data
     if (code) {
       this.loadAirportWithCode(code);
     } else {
-      console.error('No airport code found in route parameters');
       this.isLoading = false;
     }
   }
@@ -169,53 +158,42 @@ export class AirportDetailsComponent implements OnInit {
     // First get all airports to check if the code exists
     this.airportsService.getNorwayAirports().subscribe({
       next: (airports) => {
-        console.log('All airports loaded, count:', airports.length);
-        console.log('Available airport codes:', airports.map(a => a.iata).join(', '));
-        
-        // Try to find the airport directly
+ 
         const matchingAirport = airports.find(a => 
           a.iata && a.iata.toUpperCase() === code.toUpperCase()
         );
         
         if (matchingAirport) {
-          console.log('Found matching airport directly:', matchingAirport);
           this.airport = matchingAirport;
           this.isLoading = false;
           this.loadAirportDepartures(code);
         } else {
-          // If not found directly, try through the service method
-          console.log('No direct match found, trying through service...');
           this.loadAirportDetails(code);
         }
       },
       error: (error) => {
-        console.error('Error loading airports list', error);
         this.loadAirportDetails(code); // Fall back to normal loading
       }
     });
   }
   
   loadAirportDetails(code: string) {
-    console.log('Loading airport details for code:', code);
     this.airportsService.getAirportByCode(code).subscribe({
       next: (airport) => {
         this.airport = airport;
         this.isLoading = false;
-        console.log('Airport details loaded through service:', airport);
         
         if (airport) {
           this.loadAirportDepartures(code);
         }
       },
       error: (error) => {
-        console.error('Error loading airport details', error);
         this.isLoading = false;
       }
     });
   }
   
   loadAirportDepartures(code: string) {
-    console.log('Loading departures for code:', code);
     this.isLoadingDepartures = true;
     this.airportsService.getAirportDepartures(code).subscribe({
       next: (departures) => {
@@ -227,10 +205,8 @@ export class AirportDetailsComponent implements OnInit {
         // Take only the first 5 scheduled departures
         this.departures = scheduledDepartures.slice(0, 5);
         this.isLoadingDepartures = false;
-        console.log('Next 5 scheduled departures loaded:', this.departures);
       },
       error: (error) => {
-        console.error('Error loading departures', error);
         this.isLoadingDepartures = false;
       }
     });

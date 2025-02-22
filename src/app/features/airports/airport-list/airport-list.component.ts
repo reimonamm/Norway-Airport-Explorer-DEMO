@@ -6,7 +6,6 @@ import { AirportsService } from '../../../core/services/airports.service';
 import { Airport } from '../../../core/models/airport.model';
 import { GoogleMapsModule } from '@angular/google-maps';
 
-// Extend Airport interface to include lat and lng
 interface AirportWithLocation extends Airport {
   lat: number;
   lng: number;
@@ -44,13 +43,10 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.googleMapsService.loadGoogleMaps().then(() => {
       this.initMap();
       
-      // Focus on the container to enable keyboard navigation
       const containerElement = document.querySelector('app-airport-list') as HTMLElement;
       if (containerElement) {
         containerElement.focus();
       }
-    }).catch(error => {
-      console.error('Google Maps failed to load', error);
     });
   }
 
@@ -83,11 +79,10 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private navigateAirports(direction: number) {
-    // If no airport is selected, start with the first or last
+    // Select first or last airport
     if (this.selectedAirportIndex === null) {
       this.selectedAirportIndex = direction > 0 ? 0 : this.airports.length - 1;
     } else {
-      // Calculate new index
       let newIndex = this.selectedAirportIndex + direction;
       
       if (newIndex < 0) {
@@ -99,7 +94,6 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.selectedAirportIndex = newIndex;
     }
 
-    // Update highlight and scroll
     const airport = this.airports[this.selectedAirportIndex];
     this.highlightAirport(airport);
     this.scrollToSelectedAirport();
@@ -110,7 +104,6 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
       const airportItemArray = this.airportItems.toArray();
       const selectedElement = airportItemArray[this.selectedAirportIndex].nativeElement;
       
-      // Scroll to the selected element
       selectedElement.focus();
       selectedElement.scrollIntoView({
         behavior: 'smooth',
@@ -131,7 +124,6 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
       minZoom: 4,
     });
 
-    // Add markers once the map is initialized
     this.addMarkers();
   }
 
@@ -150,7 +142,6 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
       error: (error) => {
-        console.error('Error loading airports', error);
         this.isLoading = false;
       }
     });
@@ -158,11 +149,9 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private addMarkers() {
     if (!this.map) {
-      console.warn("Map is not initialized yet.");
       return;
     }
 
-    // Clear existing markers if we're recreating them
     this.markers.forEach(marker => marker.map = null);
     this.markers.clear();
 
@@ -219,26 +208,15 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   navigateToAirport(airport: AirportWithLocation) {
     if (!airport || !airport.iata) {
-      console.error('Cannot navigate: Invalid airport or missing IATA code', airport);
       return;
     }
-    
     const url = `/airports/${airport.iata}`;
-    console.log(`Navigating to: ${url}`);
-    
-    this.router.navigate(['/airports', airport.iata])
-      .then(success => {
-        console.log(`Navigation ${success ? 'successful' : 'failed'} to ${url}`);
-      })
-      .catch(error => {
-        console.error('Navigation error:', error);
-      });
+    this.router.navigate(['/airports', airport.iata]);
   }
 
   highlightAirport(airport: AirportWithLocation) {
     this.highlightedAirport = airport;
     
-    // Find and update the selected index
     const index = this.airports.findIndex(a => a.iata === airport.iata);
     if (index !== -1) {
       this.selectedAirportIndex = index;

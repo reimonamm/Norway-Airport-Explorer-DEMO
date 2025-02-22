@@ -27,9 +27,5 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.translate.use('en');
-    // Debug: Check if translations are loading
-    this.translate.get('NAV.TITLE').subscribe(res => {
-      console.log('Translation test:', res);
-    });
   }
 }
