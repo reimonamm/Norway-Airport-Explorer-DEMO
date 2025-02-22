@@ -25,7 +25,6 @@ export class GoogleMapsService {
       script.defer = true;
 
       script.onerror = (error) => {
-        console.error('Error loading Google Maps script', error);
         reject(error);
       };
 
