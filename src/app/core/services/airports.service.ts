@@ -5,6 +5,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { Airport, Departure } from '../models/airport.model';
 import { environment } from '../../../environments/environment';
 
+//Single airport
 interface AirportApiResponse {
   iata?: string;
   iata_code?: string; 
@@ -15,6 +16,7 @@ interface AirportApiResponse {
   lng?: number;
 }
 
+//Api wrapper
 interface ApiResponse<T> {
   response?: T[];
   error?: {
@@ -33,45 +35,43 @@ export class AirportsService {
 
   constructor(private http: HttpClient) {}
 
+  //AirportApiResponse -> Airport
   getNorwayAirports(): Observable<Airport[]> {
-    // Airports from storage
     const storedAirports = this.getStoredAirports();
     if (storedAirports && storedAirports.length > 0) {
       return of(storedAirports);
     }
-
-    // Api call
-    const params = new HttpParams()
-      .set('api_key', this.airlabsApiKey);
-
-    return this.http.get<ApiResponse<AirportApiResponse>>(`${this.apiBaseUrl}/airports`, { params }).pipe(
-      map(response => {
-        const airports = (response.response || [])
-          .filter((airport: AirportApiResponse) => 
+  
+    const params = new HttpParams().set('api_key', this.airlabsApiKey);
+    return this.http.get<ApiResponse<AirportApiResponse>>(`${this.apiBaseUrl}/airports`, { params })
+      .pipe(
+        map(apiData => {
+          const rawAirports = apiData.response || [];
+          
+          const norwegianAirports = rawAirports.filter((airport: AirportApiResponse) => 
             airport.country === 'Norway' || 
             airport.country === 'NO' || 
             airport.country_code === 'NO'
-          )
-          .map((airport: AirportApiResponse): Airport => ({
-        
+          );
+          
+          const simplifiedAirports = norwegianAirports.map((airport: AirportApiResponse): Airport => ({
             iata: airport.iata_code || airport.iata || '',
             name: airport.name || '',
             lat: airport.lat || 0,
             lng: airport.lng || 0
           }));
+          
+          const validAirports = simplifiedAirports.filter((airport: Airport) => airport.iata);
+          return validAirports;
+        }),
         
-        // Filter out airports without IATA codes
-        const validAirports = airports.filter((airport: Airport) => airport.iata);
-        return validAirports;
-      }),
-      tap(airports => {
-        // Store airports in localStorage
-        this.storeAirports(airports);
-      }),
-      catchError(error => {
-        return([]);
-      })
-    );
+        tap(airports => {
+          this.storeAirports(airports);
+        }),
+        catchError(error => {
+          return([]);
+        })
+      );
   }
 
   private storeAirports(airports: Airport[]) {
@@ -139,6 +139,7 @@ export class AirportsService {
       status?: string;
     }
 
+    //typecheck api response
     return this.http.get<ApiResponse<DepartureApiResponse>>(`${this.apiBaseUrl}/schedules`, { params }).pipe(
       map(response => {
         const departures = response.response || [];

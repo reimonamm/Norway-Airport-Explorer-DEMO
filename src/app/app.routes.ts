@@ -5,6 +5,8 @@ import { AboutComponent } from './pages/about/about.component';
 import { ContactComponent } from './pages/contact/contact.component';
 
 export const routes: Routes = [
+  
+  //default
   {
     path: '',
     redirectTo: '/airports',
@@ -26,6 +28,7 @@ export const routes: Routes = [
     path: 'contact',
     component: ContactComponent
   },
+  //for mistype
   {
     path: '**',
     redirectTo: '/airports'
