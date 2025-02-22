@@ -5,19 +5,14 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { Airport, Departure } from '../models/airport.model';
 import { environment } from '../../../environments/environment';
 
-// Define API response interfaces to avoid 'any' types
 interface AirportApiResponse {
   iata?: string;
   iata_code?: string; 
-  icao?: string;
-  icao_code?: string; 
   name?: string;
-  city?: string;
   country?: string;
   country_code?: string;
   lat?: number;
   lng?: number;
-  [key: string]: any; // For any other properties that might be present
 }
 
 interface ApiResponse<T> {
@@ -26,7 +21,6 @@ interface ApiResponse<T> {
     message: string;
     code: number;
   };
-  [key: string]: any;
 }
 
 @Injectable({
@@ -40,19 +34,18 @@ export class AirportsService {
   constructor(private http: HttpClient) {}
 
   getNorwayAirports(): Observable<Airport[]> {
-    // Check if airports are already stored
+    // Airports from storage
     const storedAirports = this.getStoredAirports();
     if (storedAirports && storedAirports.length > 0) {
       return of(storedAirports);
     }
 
-    // If not stored, fetch from API
+    // Api call
     const params = new HttpParams()
       .set('api_key', this.airlabsApiKey);
 
     return this.http.get<ApiResponse<AirportApiResponse>>(`${this.apiBaseUrl}/airports`, { params }).pipe(
       map(response => {
-        // Filter for Norwegian airports
         const airports = (response.response || [])
           .filter((airport: AirportApiResponse) => 
             airport.country === 'Norway' || 
@@ -62,10 +55,7 @@ export class AirportsService {
           .map((airport: AirportApiResponse): Airport => ({
         
             iata: airport.iata_code || airport.iata || '',
-            icao: airport.icao_code || airport.icao || '',
             name: airport.name || '',
-            city: airport.city || '',
-            country: airport.country || 'Norway',
             lat: airport.lat || 0,
             lng: airport.lng || 0
           }));
@@ -82,38 +72,7 @@ export class AirportsService {
       }),
       catchError(error => {
         console.error('Error fetching airports:', error);
-        // Fallback to a minimal list of Norwegian airports if API fails
-        const fallbackAirports: Airport[] = [
-          {
-            iata: 'OSL',
-            icao: 'ENGM',
-            name: 'Oslo Airport Gardermoen',
-            city: 'Oslo',
-            country: 'Norway',
-            lat: 60.1939,
-            lng: 11.1004
-          },
-          {
-            iata: 'BGO',
-            icao: 'ENBR',
-            name: 'Bergen Airport Flesland',
-            city: 'Bergen',
-            country: 'Norway',
-            lat: 60.2936,
-            lng: 5.2248
-          },
-          {
-            iata: 'TRD',
-            icao: 'ENVA',
-            name: 'Trondheim Airport Værnes',
-            city: 'Trondheim',
-            country: 'Norway',
-            lat: 63.4572,
-            lng: 10.9236
-          }
-        ];
-        this.storeAirports(fallbackAirports);
-        return of(fallbackAirports);
+        return([]);
       })
     );
   }
@@ -152,7 +111,6 @@ export class AirportsService {
     }
   }
 
-  // Fixed method to get airport details by IATA code - handles case sensitivity
   getAirportByCode(iataCode: string): Observable<Airport | undefined> {
     if (!iataCode) {
       console.error('Empty IATA code provided');
@@ -183,7 +141,6 @@ export class AirportsService {
     );
   }
 
-  // Method to get airport departures
   getAirportDepartures(airportCode: string): Observable<Departure[]> {
     if (!airportCode) {
       return of([]);
@@ -199,14 +156,11 @@ export class AirportsService {
 
     interface DepartureApiResponse {
       flight_iata?: string;
-      flight_icao?: string;
       flight_number?: string;
-      dep_iata?: string;
       dep_time?: string;
       arr_iata?: string;
       scheduled_time?: string;
       status?: string;
-      [key: string]: any;
     }
 
     return this.http.get<ApiResponse<DepartureApiResponse>>(`${this.apiBaseUrl}/schedules`, { params }).pipe(

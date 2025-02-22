@@ -34,7 +34,6 @@ import { Airport, Departure } from '../../../core/models/airport.model';
             {{ airport.name }}
           </h1>
           <p class="text-sm text-gray-500">IATA: {{ airport.iata }}</p>
-          <p *ngIf="airport.icao" class="text-sm text-gray-500">ICAO: {{ airport.icao }}</p>
         </div>
         
         <div class="bg-white shadow rounded-lg p-6">
