@@ -5,25 +5,21 @@ import { GoogleMapsService } from '../../../core/services/google-maps.service';
 import { AirportsService } from '../../../core/services/airports.service';
 import { Airport } from '../../../core/models/airport.model';
 import { GoogleMapsModule } from '@angular/google-maps';
-
-interface AirportWithLocation extends Airport {
-  lat: number;
-  lng: number;
-}
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-airport-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, GoogleMapsModule],
+  imports: [CommonModule, RouterModule, GoogleMapsModule, TranslateModule],
   templateUrl: './airport-list.component.html',
   styleUrls: ['./airport-list.component.css']
 })
 export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('airportItem') airportItems!: QueryList<ElementRef>;
 
-  airports: AirportWithLocation[] = [];
+  airports: Airport[] = [];
   isLoading = true;
-  highlightedAirport: AirportWithLocation | null = null;
+  highlightedAirport: Airport | null = null;
   selectedAirportIndex: number | null = null;
   
   private map!: google.maps.Map;
@@ -79,7 +75,7 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private navigateAirports(direction: number) {
-    // Select first or last airport
+
     if (this.selectedAirportIndex === null) {
       this.selectedAirportIndex = direction > 0 ? 0 : this.airports.length - 1;
     } else {
@@ -170,13 +166,10 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
         title: airport.name
       });
 
-      // Store marker reference
       this.markers.set(airport.iata, marker);
 
-      // Click event - Navigate to airport details
       marker.addListener('click', () => this.navigateToAirport(airport));
 
-      // Hover events for marker
       marker.addListener('mouseover', () => {
         this.highlightAirport(airport);
       });
@@ -202,11 +195,11 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private isHighlighted(airport: AirportWithLocation): boolean {
+  private isHighlighted(airport: Airport): boolean {
     return this.highlightedAirport?.iata === airport.iata;
   }
 
-  navigateToAirport(airport: AirportWithLocation) {
+  navigateToAirport(airport: Airport) {
     if (!airport || !airport.iata) {
       return;
     }
@@ -214,7 +207,7 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/airports', airport.iata]);
   }
 
-  highlightAirport(airport: AirportWithLocation) {
+  highlightAirport(airport: Airport) {
     this.highlightedAirport = airport;
     
     const index = this.airports.findIndex(a => a.iata === airport.iata);

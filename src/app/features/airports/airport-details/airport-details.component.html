@@ -1,0 +1,112 @@
+<div 
+  class="container mx-auto p-4" 
+  role="region" 
+  aria-labelledby="airport-details-heading"
+>
+  <div *ngIf="isLoading" class="text-center p-8" aria-live="polite">
+    <div 
+      class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mb-4" 
+      aria-hidden="true"
+    ></div>
+    <p>{{ 'AIRPORT_DETAILS.LOADING' | translate }}</p>
+  </div>
+  
+  <div *ngIf="!isLoading && airport" class="space-y-4">
+    <div class="bg-white shadow rounded-lg p-6">
+      <h1 
+        id="airport-details-heading" 
+        class="text-2xl font-bold mb-2"
+        tabindex="0"
+      >
+        {{ airport.name }}
+      </h1>
+      <p class="text-sm text-gray-500">{{ 'AIRPORT_DETAILS.IATA_CODE' | translate }}: {{ airport.iata }}</p>
+    </div>
+    
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 
+        class="text-xl font-semibold mb-4" 
+        id="departures-heading"
+        tabindex="0"
+      >
+        {{ 'AIRPORT_DETAILS.NEXT_DEPARTURES' | translate }}
+      </h2>
+      
+      <div 
+        *ngIf="isLoadingDepartures" 
+        class="text-center py-4" 
+        aria-live="polite"
+      >
+        <div 
+          class="inline-block animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-blue-500 mb-2"
+          aria-hidden="true"
+        ></div>
+        <p>{{ 'AIRPORT_DETAILS.LOADING_DEPARTURES' | translate }}</p>
+      </div>
+      
+      <div 
+        *ngIf="!isLoadingDepartures && departures.length === 0" 
+        class="text-center text-gray-500 py-4"
+        aria-live="polite"
+      >
+        {{ 'AIRPORT_DETAILS.NO_DEPARTURES' | translate }}
+      </div>
+      
+      <table 
+        *ngIf="departures.length > 0" 
+        class="w-full" 
+        aria-labelledby="departures-heading"
+      >
+        <thead>
+          <tr class="border-b">
+            <th class="text-left p-2">{{ 'AIRPORT_DETAILS.FLIGHT' | translate }}</th>
+            <th class="text-left p-2">{{ 'AIRPORT_DETAILS.DESTINATION' | translate }}</th>
+            <th class="text-left p-2">{{ 'AIRPORT_DETAILS.SCHEDULED_TIME' | translate }}</th>
+            <th class="text-left p-2">{{ 'AIRPORT_DETAILS.STATUS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr 
+            *ngFor="let departure of departures" 
+            class="border-b hover:bg-gray-50"
+            tabindex="0"
+          >
+            <td class="p-2">{{ departure.flight_iata || departure.flight_number }}</td>
+            <td class="p-2">{{ departure.arr_iata }}</td>
+            <td class="p-2">{{ formatTime(departure.scheduled_time || departure.dep_time) }}</td>
+            <td class="p-2">{{ departure.status || ('AIRPORT_DETAILS.SCHEDULED' | translate) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="mt-6">
+      <button 
+        (click)="goBack()" 
+        [attr.aria-label]="'AIRPORT_DETAILS.BACK_TO_AIRPORTS' | translate"
+        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+      >
+        {{ 'AIRPORT_DETAILS.BACK_TO_AIRPORTS' | translate }}
+      </button>
+    </div>
+  </div>
+  
+  <div 
+    *ngIf="!isLoading && !airport" 
+    class="bg-red-50 border-l-4 border-red-500 p-4 my-4"
+    role="alert"
+  >
+    <div class="flex flex-col">
+      <div class="ml-3">
+        <p class="text-red-700 font-medium">{{ 'AIRPORT_DETAILS.AIRPORT_NOT_FOUND' | translate }}</p>
+        <button 
+          (click)="goBack()" 
+          [attr.aria-label]="'AIRPORT_DETAILS.BACK_TO_AIRPORTS' | translate"
+          class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+        >
+          {{ 'AIRPORT_DETAILS.BACK_TO_AIRPORTS' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

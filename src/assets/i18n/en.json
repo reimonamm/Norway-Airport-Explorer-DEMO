@@ -11,12 +11,6 @@
       "NO_RESULTS": "No airports found",
       "LOADING": "Loading airports..."
     },
-    "AIRPORT_DETAILS": {
-      "DEPARTURES": "Next Departures",
-      "BACK": "Back to list",
-      "LOADING": "Loading airport details...",
-      "NO_DEPARTURES": "No departures available"
-    },
     "ABOUT": {
       "TITLE": "About Norwegian Airports Explorer",
       "PROJECT_OVERVIEW": "Project Overview",
@@ -40,5 +34,25 @@
       "MESSAGE": "Message",
       "SEND": "Send Message",
       "SUCCESS": "Demo: Message submitted successfully!"
+    },
+    "AIRPORT_LIST": {
+      "TITLE": "Airports in Norway",
+      "LOADING": "Loading airports...",
+      "NO_AIRPORTS": "No airports found",
+      "IATA_CODE": "IATA"
+    },
+    "AIRPORT_DETAILS": {
+      "LOADING": "Loading airport details...",
+      "IATA_CODE": "IATA",
+      "NEXT_DEPARTURES": "Next Departures",
+      "LOADING_DEPARTURES": "Loading departures...",
+      "NO_DEPARTURES": "No upcoming departures found",
+      "FLIGHT": "Flight",
+      "DESTINATION": "Destination",
+      "SCHEDULED_TIME": "Scheduled Time",
+      "STATUS": "Status",
+      "SCHEDULED": "Scheduled",
+      "BACK_TO_AIRPORTS": "Back to Airports",
+      "AIRPORT_NOT_FOUND": "Airport not found"
     }
   }

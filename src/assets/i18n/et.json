@@ -11,19 +11,13 @@
       "NO_RESULTS": "Lennujaamu ei leitud",
       "LOADING": "Laen lennujaamu..."
     },
-    "AIRPORT_DETAILS": {
-      "DEPARTURES": "Järgmised väljumised",
-      "BACK": "Tagasi nimekirja",
-      "LOADING": "Laen lennujaama andmeid...",
-      "NO_DEPARTURES": "Väljumisi pole saadaval"
-    },
     "ABOUT": {
-      "TITLE": "Teave Norra Lennujaamade Rakenduse Kohta",
+      "TITLE": "Norra Lennujaamade Rakendus",
       "PROJECT_OVERVIEW": "Projekti ülevaade",
-      "PROJECT_DESCRIPTION": "Tere tulemast Norra Lennujaamade rakendusse, mis on loodud pakkumaks reaalajas teavet Norra lennujaamade kohta.",
+      "PROJECT_DESCRIPTION": "Tere tulemast Norra Lennujaamade rakendusse, mis on loodud pakkumaks reaalajas olevat teavet Norra lennujaamade kohta.",
       "FEATURES": "Võimalused",
       "FEATURE_LIST": {
-        "AIRPORTS": "Täielik nimekiri Norra lennujaamadest",
+        "AIRPORTS": "Nimekiri Norra lennujaamadest",
         "DEPARTURES": "Reaalajas jälgimine järgmise 5 väljumise kohta igas lennujaamas",
         "MAP": "Interaktiivne kaart lennujaamade asukohtadega",
         "DETAILS": "Detailne lennujaamade info ja statistika"
@@ -40,5 +34,25 @@
       "MESSAGE": "Sõnum",
       "SEND": "Saada sõnum",
       "SUCCESS": "Demo: Sõnum edukalt saadetud!"
+    },
+    "AIRPORT_LIST": {
+      "TITLE": "Norra Lennujaamad",
+      "LOADING": "Laen lennujaamu...",
+      "NO_AIRPORTS": "Lennujaamu ei leitud",
+      "IATA_CODE": "IATA"
+    },
+    "AIRPORT_DETAILS": {
+      "LOADING": "Laen lennujaama andmeid...",
+      "IATA_CODE": "IATA",
+      "NEXT_DEPARTURES": "Järgmised väljumised",
+      "LOADING_DEPARTURES": "Laen väljumisi...",
+      "NO_DEPARTURES": "Tulevasi väljumisi ei leitud",
+      "FLIGHT": "Lend",
+      "DESTINATION": "Sihtkoht",
+      "SCHEDULED_TIME": "Planeeritud aeg",
+      "STATUS": "Staatus",
+      "SCHEDULED": "Planeeritud",
+      "BACK_TO_AIRPORTS": "Tagasi lennujaamade juurde",
+      "AIRPORT_NOT_FOUND": "Lennujaama ei leitud"
     }
   }

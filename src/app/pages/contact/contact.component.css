@@ -1,0 +1,7 @@
+/*Enhanced focus*/
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Tailwind blue-400 with opacity */
+    border-radius: 0.25rem;
+    transition: all 0.3s ease;
+  }

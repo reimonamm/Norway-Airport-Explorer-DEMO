@@ -6,15 +6,15 @@
   <!-- Left side - Airport List -->
   <div class="w-full md:w-1/3 overflow-y-auto border-r">
     <div class="p-4">
-      <h1 class="text-2xl font-bold mb-4">Airports in Norway</h1>
+      <h1 class="text-2xl font-bold mb-4">{{ 'AIRPORT_LIST.TITLE' | translate }}</h1>
       
       <div *ngIf="isLoading" class="text-center p-8">
         <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mb-4"></div>
-        <p>Loading airports...</p>
+        <p>{{ 'AIRPORT_LIST.LOADING' | translate }}</p>
       </div>
       
       <div *ngIf="!isLoading && airports.length === 0" class="text-center">
-        No airports found.
+        {{ 'AIRPORT_LIST.NO_AIRPORTS' | translate }}
       </div>
       
       <div 
@@ -22,7 +22,7 @@
         *ngIf="!isLoading" 
         class="space-y-2 overflow-y-auto max-h-[calc(100vh-200px)]" 
         role="list" 
-        aria-label="List of Airports in Norway"
+        [attr.aria-label]="'AIRPORT_LIST.TITLE' | translate"
       >
         <div
           *ngFor="let airport of airports; let i = index"
@@ -40,7 +40,7 @@
           [attr.aria-setsize]="airports.length"
         >
           <h2 class="text-lg font-semibold">{{ airport.name }}</h2>
-          <span class="text-xs text-gray-500">IATA: {{ airport.iata }}</span>
+          <span class="text-xs text-gray-500">{{ 'AIRPORT_LIST.IATA_CODE' | translate }}: {{ airport.iata }}</span>
         </div>
       </div>
     </div>
