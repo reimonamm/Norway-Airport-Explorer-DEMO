@@ -51,6 +51,78 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.markers.clear();
   }
 
+  private loadAirports() {
+    this.airportsService.getNorwayAirports().subscribe({
+      next: (airports) => {
+        this.airports = airports.map(airport => ({
+          ...airport,
+          lat: (airport as any).lat || 0,
+          lng: (airport as any).lng || 0
+        }));
+        this.isLoading = false;
+        
+        if (this.map) {
+          this.addMarkers();
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+      }
+    });
+  }
+
+  private initMap(): void {
+    this.map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
+      center: { lat: 64.5, lng: 11.5 },
+      zoom: 5,
+      mapId: 'b06c1e893dcdec9f',
+      mapTypeId: 'terrain',
+      scrollwheel: true,
+      disableDoubleClickZoom: true,
+      maxZoom: 15,
+      minZoom: 4,
+    });
+
+    this.addMarkers();
+  }
+
+  private addMarkers() {
+    if (!this.map) {
+      return;
+    }
+
+    this.markers.forEach(marker => marker.map = null);
+    this.markers.clear();
+
+    this.airports.forEach((airport) => {
+      const pin = new google.maps.marker.PinElement({
+        scale: this.isHighlighted(airport) ? 1.4 : 1,
+        background: this.isHighlighted(airport) ? '#3b82f6' : '#64748b',
+        borderColor: this.isHighlighted(airport) ? '#1d4ed8' : '#475569',
+        glyphColor: '#ffffff'
+      });
+
+      const marker = new google.maps.marker.AdvancedMarkerElement({
+        position: { lat: airport.lat, lng: airport.lng },
+        content: pin.element,
+        map: this.map,
+        title: airport.name
+      });
+
+      this.markers.set(airport.iata, marker);
+
+      marker.addListener('click', () => this.navigateToAirport(airport));
+
+      marker.addListener('mouseover', () => {
+        this.highlightAirport(airport);
+      });
+
+      marker.addListener('mouseout', () => {
+        this.resetHighlight();
+      });
+    });
+  }
+
   onContainerKeyDown(event: KeyboardEvent) {
     if (!this.airports.length) return;
 
@@ -108,93 +180,6 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private initMap(): void {
-    this.map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
-      center: { lat: 64.5, lng: 11.5 },
-      zoom: 5,
-      mapId: 'b06c1e893dcdec9f',
-      mapTypeId: 'terrain',
-      scrollwheel: true,
-      disableDoubleClickZoom: true,
-      maxZoom: 15,
-      minZoom: 4,
-    });
-
-    this.addMarkers();
-  }
-
-  private loadAirports() {
-    this.airportsService.getNorwayAirports().subscribe({
-      next: (airports) => {
-        this.airports = airports.map(airport => ({
-          ...airport,
-          lat: (airport as any).lat || 0,
-          lng: (airport as any).lng || 0
-        }));
-        this.isLoading = false;
-        
-        if (this.map) {
-          this.addMarkers();
-        }
-      },
-      error: (error) => {
-        this.isLoading = false;
-      }
-    });
-  }
-
-  private addMarkers() {
-    if (!this.map) {
-      return;
-    }
-
-    this.markers.forEach(marker => marker.map = null);
-    this.markers.clear();
-
-    this.airports.forEach((airport) => {
-      const pin = new google.maps.marker.PinElement({
-        scale: this.isHighlighted(airport) ? 1.4 : 1,
-        background: this.isHighlighted(airport) ? '#3b82f6' : '#64748b',
-        borderColor: this.isHighlighted(airport) ? '#1d4ed8' : '#475569',
-        glyphColor: '#ffffff'
-      });
-
-      const marker = new google.maps.marker.AdvancedMarkerElement({
-        position: { lat: airport.lat, lng: airport.lng },
-        content: pin.element,
-        map: this.map,
-        title: airport.name
-      });
-
-      this.markers.set(airport.iata, marker);
-
-      marker.addListener('click', () => this.navigateToAirport(airport));
-
-      marker.addListener('mouseover', () => {
-        this.highlightAirport(airport);
-      });
-
-      marker.addListener('mouseout', () => {
-        this.resetHighlight();
-      });
-    });
-  }
-
-  private updateMarkerStyles() {
-    this.airports.forEach(airport => {
-      const marker = this.markers.get(airport.iata);
-      if (marker) {
-        const pin = new google.maps.marker.PinElement({
-          scale: this.isHighlighted(airport) ? 1.4 : 1,
-          background: this.isHighlighted(airport) ? '#3b82f6' : '#64748b',
-          borderColor: this.isHighlighted(airport) ? '#1d4ed8' : '#475569',
-          glyphColor: '#ffffff'
-        });
-        marker.content = pin.element;
-      }
-    });
-  }
-
   private isHighlighted(airport: Airport): boolean {
     return this.highlightedAirport?.iata === airport.iata;
   }
@@ -223,4 +208,20 @@ export class AirportListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.selectedAirportIndex = null;
     this.updateMarkerStyles();
   }
+
+  private updateMarkerStyles() {
+    this.airports.forEach(airport => {
+      const marker = this.markers.get(airport.iata);
+      if (marker) {
+        const pin = new google.maps.marker.PinElement({
+          scale: this.isHighlighted(airport) ? 1.4 : 1,
+          background: this.isHighlighted(airport) ? '#3b82f6' : '#64748b',
+          borderColor: this.isHighlighted(airport) ? '#1d4ed8' : '#475569',
+          glyphColor: '#ffffff'
+        });
+        marker.content = pin.element;
+      }
+    });
+  }
+
 }
