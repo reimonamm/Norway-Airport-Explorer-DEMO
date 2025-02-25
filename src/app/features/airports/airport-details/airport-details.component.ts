@@ -28,45 +28,26 @@ export class AirportDetailsComponent implements OnInit {
   ) {}
   
   ngOnInit() {
-    const code = this.route.snapshot.paramMap.get('code');;
-       
+    const code = this.route.snapshot.paramMap.get('code');
     if (code) {
-      this.loadAirportWithCode(code);
+      this.loadAirport(code);
     } else {
       this.isLoading = false;
     }
   }
   
-  loadAirportWithCode(code: string) {
+  loadAirport(code: string) {
     this.isLoading = true;
     this.airportsService.getNorwayAirports().subscribe({
       next: (airports) => {
- 
         const matchingAirport = airports.find(a => 
           a.iata && a.iata.toUpperCase() === code.toUpperCase()
         );
         
-        if (matchingAirport) {
-          this.airport = matchingAirport;
-          this.isLoading = false;
-          this.loadAirportDepartures(code);
-        } else {
-          this.loadAirportDetails(code);
-        }
-      },
-      error: (error) => {
-        this.loadAirportDetails(code); 
-      }
-    });
-  }
-  
-  loadAirportDetails(code: string) {
-    this.airportsService.getAirportByCode(code).subscribe({
-      next: (airport) => {
-        this.airport = airport;
+        this.airport = matchingAirport;
         this.isLoading = false;
         
-        if (airport) {
+        if (matchingAirport) {
           this.loadAirportDepartures(code);
         }
       },

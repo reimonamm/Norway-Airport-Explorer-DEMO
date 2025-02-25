@@ -106,19 +106,6 @@ export class AirportsService {
     }
   }
 
-  getAirportByCode(iataCode: string): Observable<Airport | undefined> {
-    if (!iataCode) {
-      return of(undefined);
-    }
-    const normalizedCode = iataCode.trim().toUpperCase();
-    
-    return this.getNorwayAirports().pipe(
-      map(airports => airports.find((airport: Airport) => 
-        airport.iata && airport.iata.toUpperCase() === normalizedCode
-      ))
-    );
-}
-
   getAirportDepartures(airportCode: string): Observable<Departure[]> {
     if (!airportCode) {
       return of([]);
