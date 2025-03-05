@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChildren, QueryList, AfterViewInit, HostListener } from '@angular/core';
+import { Component, ElementRef, ViewChild, NgZone, AfterViewInit, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
@@ -11,7 +11,6 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./contact.component.css']
 })
 export class ContactComponent implements AfterViewInit {
-  @ViewChildren('nameInput, emailInput, messageInput') formInputs!: QueryList<ElementRef>;
 
   formData = {
     name: '',
@@ -20,9 +19,15 @@ export class ContactComponent implements AfterViewInit {
   };
   
   showDemoMessage = false;
+
   
   ngAfterViewInit() {
-    this.focusFirstInput();
+    setTimeout(() => {
+      const nameInput = document.getElementById('name');
+      if (nameInput) {
+        nameInput.focus();
+      }
+    }, 100);
   }
 
   @HostListener('keydown', ['$event'])
@@ -36,12 +41,6 @@ export class ContactComponent implements AfterViewInit {
     input.control.markAsTouched();
   }
 
-  focusFirstInput() {
-    if (this.formInputs && this.formInputs.first) {
-      this.formInputs.first.nativeElement.focus();
-    }
-  }
-
   clearForm() {
     this.formData = {
       name: '',
@@ -49,7 +48,13 @@ export class ContactComponent implements AfterViewInit {
       message: ''
     };
     this.showDemoMessage = false;
-    this.focusFirstInput();
+    
+    setTimeout(() => {
+      const nameInput = document.getElementById('name');
+      if (nameInput) {
+        nameInput.focus();
+      }
+    }, 100);
   }
   
   onSubmit() {

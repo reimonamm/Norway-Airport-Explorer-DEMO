@@ -40,6 +40,7 @@
         name="name" 
         [(ngModel)]="formData.name"
         #nameInput="ngModel"
+        #nameinputElement
         required
         aria-required="true"
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -68,6 +69,7 @@
         name="email"
         [(ngModel)]="formData.email" 
         #emailInput="ngModel"
+        emailInputElement
         required
         pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
         aria-required="true"
@@ -96,6 +98,7 @@
         name="message"
         [(ngModel)]="formData.message" 
         #messageInput="ngModel"
+        #messageInputElement
         rows="4" 
         required
         aria-required="true"
